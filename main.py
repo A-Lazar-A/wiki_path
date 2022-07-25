@@ -2,7 +2,28 @@ import click
 from art import text2art
 from bs4 import BeautifulSoup
 import requests
+import re
 from random import choice
+
+
+def recursive_following(link, steps, main_url):
+    if steps == 0:
+        return
+    steps -= 1
+
+    response = requests.get(link)
+
+    if response.status_code != 200:
+        print(f'Something went wrong or there isn\'t any article, try again')
+        return
+
+    html = BeautifulSoup(response.content, 'lxml')
+
+    title = html.find(id='firstHeading')
+    links = html.find(id='bodyContent').find_all(href=re.compile('wiki'))
+    print(f'{title.text}\n{link}\n')
+
+    recursive_following(main_url + choice(links)['href'], steps, main_url)
 
 
 @click.command('Wiki Path')
@@ -18,20 +39,16 @@ def wiki_path(request, language, steps):
     articles
     :param request: Wiki article
     :param language: Provided language (ru or eng)
+    :param steps: How many steps do you want to go
     """
     print(text2art('Wiki Path'))
-    url_en = 'https://en.wikipedia.org/wiki/'
-    url_ru = 'https://ru.wikipedia.org/wiki/'
-    response = None
-    if language == 'eng':
-        response = requests.get(url_en + request)
+    url = 'https://en.wikipedia.org/wiki/'
+
     if language == 'ru':
-        response = requests.get(url_ru + request)
-    if response.status_code != 200:
-        print('Something went wrong, try again')
-        return
-    else:
-        print('Success', steps)
+        url = 'https://ru.wikipedia.org/wiki/'
+
+    recursive_following(url + request, steps, url[:-6])
+
 
 if __name__ == '__main__':
     wiki_path()
