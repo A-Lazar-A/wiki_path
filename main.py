@@ -43,6 +43,7 @@ def wiki_path(request, language, steps):
     """
     This is the program that shows one a path made in required amount of steps from the provided Wikipedia article
     to a random one
+    Two or more words write separated by _ (World_War)
     """
     print(text2art('Wiki Path'))
     url = 'https://en.wikipedia.org/wiki/'
