@@ -56,6 +56,5 @@ def wiki_path(request, language, steps):
         print('OOOPS, try again')
 
 
-
 if __name__ == '__main__':
     wiki_path()
