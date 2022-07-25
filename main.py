@@ -38,11 +38,11 @@ def recursive_following(link, steps, main_url):
               type=click.Choice(['eng', 'ru']),
               help='Choose wiki language',
               default='eng')
-@click.option('--steps', '-s', type=int, default=10, help='Choose number os steps')
+@click.option('--steps', '-s', type=int, default=10, help='Choose number of steps')
 def wiki_path(request, language, steps):
     """
     This is the program that shows one a path made in required amount of steps from the provided Wikipedia article
-    to a random one
+    to a random one\n
     Two or more words write separated by _ (World_War)
     """
     print(text2art('Wiki Path'))
